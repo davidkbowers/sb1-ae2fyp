@@ -15,7 +15,7 @@ export default function Login() {
   const onSubmit = async (data: LoginCredentials) => {
     try {
       // In a real app, make an API call here
-      const response = await fetch('/api/auth/login', {
+      const response = await fetch('https://odvrest.applikuapp.com/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
