@@ -4,6 +4,7 @@ import { Upload, Play, Pause, X, Save, ArrowLeft } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { videoProcessor } from '../utils/videoProcessor';
 import type { ProcessedVideo } from '../utils/videoProcessor';
+import { ENDPOINTS, getApiUrl } from '../utils/api';
 
 interface VideoUploadProps {
   lessonId?: string;
@@ -67,9 +68,12 @@ export default function VideoUpload({ lessonId }: VideoUploadProps) {
       formData.append('duration', processedVideo.duration.toString());
       formData.append('lessonId', lessonId || '');
 
-      const response = await fetch('/api/videos/upload', {
+      const response = await fetch(getApiUrl(ENDPOINTS.VIDEOS), {
         method: 'POST',
         body: formData,
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
       });
 
       if (!response.ok) throw new Error('Upload failed');

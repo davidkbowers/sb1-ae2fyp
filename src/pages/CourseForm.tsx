@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Upload, X, Save, ArrowLeft } from 'lucide-react';
 import toast from 'react-hot-toast';
 import type { Course } from '../types/course';
+import { ENDPOINTS, getApiUrl, createApiOptions } from '../utils/api';
 
 type CourseFormData = Omit<Course, 'id' | 'createdAt' | 'updatedAt'>;
 
@@ -15,14 +16,13 @@ export default function CourseForm() {
 
   const onSubmit = async (data: CourseFormData) => {
     try {
-      const endpoint = id ? `/api/courses/${id}` : '/api/courses';
+      const endpoint = id ? `${ENDPOINTS.COURSES}/${id}` : ENDPOINTS.COURSES;
       const method = id ? 'PUT' : 'POST';
 
-      const response = await fetch(endpoint, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
+      const response = await fetch(
+        getApiUrl(endpoint),
+        createApiOptions(method, data)
+      );
 
       if (!response.ok) throw new Error('Failed to save course');
 

@@ -6,6 +6,7 @@ import { LogIn } from 'lucide-react';
 import type { LoginCredentials } from '../types/auth';
 import { useAuthStore } from '../store/authStore';
 import toast from 'react-hot-toast';
+import { ENDPOINTS, getApiUrl, createApiOptions } from '../utils/api';
 
 export default function Login() {
   const { register, handleSubmit, formState: { errors } } = useForm<LoginCredentials>();
@@ -14,12 +15,10 @@ export default function Login() {
 
   const onSubmit = async (data: LoginCredentials) => {
     try {
-      // In a real app, make an API call here
-      const response = await fetch('https://odvrest.applikuapp.com/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
+      const response = await fetch(
+        getApiUrl(ENDPOINTS.LOGIN),
+        createApiOptions('POST', data)
+      );
 
       if (!response.ok) throw new Error('Login failed');
 

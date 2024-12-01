@@ -1,10 +1,11 @@
-import React from 'react';
+//import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router-dom';
 import { UserPlus } from 'lucide-react';
 import type { RegisterData } from '../types/auth';
 import { useAuthStore } from '../store/authStore';
 import toast from 'react-hot-toast';
+import { ENDPOINTS, getApiUrl, createApiOptions } from '../utils/api';
 
 export default function Register() {
   const { register, handleSubmit, formState: { errors } } = useForm<RegisterData>();
@@ -12,22 +13,36 @@ export default function Register() {
   const setAuth = useAuthStore(state => state.setAuth);
 
   const onSubmit = async (data: RegisterData) => {
+    console.log('Registration attempt with:', { ...data, password: '[REDACTED]' });
+    
     try {
-      // In a real app, make an API call here
-      const response = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
+      const response = await fetch(
+        getApiUrl(ENDPOINTS.REGISTER),
+        createApiOptions('POST', data)
+      );
 
-      if (!response.ok) throw new Error('Registration failed');
+      const responseData = await response.json();
+      
+      if (!response.ok) {
+        console.error('Registration failed:', {
+          status: response.status,
+          statusText: response.statusText,
+          data: responseData
+        });
+        throw new Error(responseData.message || 'Registration failed');
+      }
 
-      const { user, token } = await response.json();
+      console.log('Registration successful:', { userId: responseData.user.id });
+      const { user, token } = responseData;
       setAuth(user, token);
-      toast.success('Registration successful!');
+      toast.success('Registration successful! Welcome aboard!');
       navigate('/dashboard');
     } catch (error) {
-      toast.error('Registration failed. Please try again.');
+      console.error('Registration error:', error);
+      const errorMessage = error instanceof Error 
+        ? error.message 
+        : 'Registration failed. Please try again.';
+      toast.error(errorMessage);
     }
   };
 
