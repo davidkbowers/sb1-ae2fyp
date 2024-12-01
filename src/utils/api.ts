@@ -4,8 +4,8 @@ export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localho
 // API endpoints
 export const ENDPOINTS = {
     // Auth endpoints
-    LOGIN: '/auth/login',
-    REGISTER: '/auth/register',
+    LOGIN: 'login',
+    REGISTER: 'register',
     
     // Video endpoints
     VIDEOS: '/videos',
