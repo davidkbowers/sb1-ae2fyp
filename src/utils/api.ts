@@ -1,5 +1,5 @@
 // API configuration
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://odvrest.applikuapp.com/';
 
 // API endpoints
 export const ENDPOINTS = {
@@ -8,17 +8,17 @@ export const ENDPOINTS = {
     REGISTER: 'register',
     
     // Video endpoints
-    VIDEOS: '/videos',
-    VIDEO_UPLOAD: '/videos/upload',
+    VIDEOS: 'videos',
+    VIDEO_UPLOAD: 'videos/upload',
     
     // Course endpoints
-    COURSES: '/courses',
+    COURSES: 'courses',
     
     // Lesson endpoints
-    LESSONS: '/lessons',
+    LESSONS: 'lessons',
     
     // Player endpoints
-    PLAYER: '/player',
+    PLAYER: 'player',
 } as const;
 
 // Helper function to construct full API URLs
